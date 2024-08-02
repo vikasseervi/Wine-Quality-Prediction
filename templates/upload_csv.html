@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload CSV</title>
+    <style>
+        .dataframe {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        .dataframe th, .dataframe td {
+            border: 1px solid black;
+            padding: 8px;
+            text-align: left;
+        }
+        .dataframe th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+<h2>Upload Wine Quality Dataset (CSV)</h2>
+<form action="{{ url_for('predict_csv') }}" method="post" enctype="multipart/form-data">
+    <input type="file" name="file" accept=".csv" required>
+    <button type="submit">Upload</button>
+</form>
+<br>
+{% if tables %}
+<h3>Predictions:</h3>
+{% for table in tables %}
+{{ table|safe }}
+{% endfor %}
+{% endif %}
+</body>
+</html>
