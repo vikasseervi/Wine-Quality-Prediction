@@ -33,8 +33,42 @@ def predict_csv():
 
     if file:
         data = pd.read_csv(file)
-        data['Prediction'] = data.apply(lambda row: 'Good Quality Wine' if model.predict(np.array(row).reshape(1, -1))[0] == 1 else 'Bad Quality Wine', axis=1)
-        return render_template('upload_csv.html', tables=[data.to_html(classes='data', header="true", index=False)], titles=data.columns.values)
+
+        # Ensure the data has the required columns
+        required_features = [
+            'fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar',
+            'chlorides', 'free sulfur dioxide', 'total sulfur dioxide', 'density',
+            'pH', 'sulphates', 'alcohol'
+        ]
+
+        if not all(feature in data.columns for feature in required_features):
+            return "CSV file is missing some required features."
+
+        data = data[required_features]  # Select only the required columns
+
+        # Make predictions
+        predictions = []
+        for index, row in data.iterrows():
+            input_data = row.values.reshape(1, -1)
+            prediction = model.predict(input_data)
+            output = 'Good Quality Wine' if prediction[0] == 1 else 'Bad Quality Wine'
+            predictions.append(output)
+
+        data.insert(0, 'Serial No.', range(1, len(data) + 1))
+        data['Prediction'] = predictions
+
+        # Convert DataFrame to HTML with custom classes
+        def add_classes(row):
+            css_class = 'good-quality' if row['Prediction'] == 'Good Quality Wine' else 'bad-quality'
+            row_html = ''.join([f'<td class="{css_class}">{val}</td>' for val in row])
+            return f'<tr>{row_html}</tr>'
+
+        table_html = '<table class="dataframe">'
+        table_html += '<thead><tr>' + ''.join([f'<th>{col}</th>' for col in data.columns]) + '</tr></thead>'
+        table_html += '<tbody>' + ''.join(data.apply(add_classes, axis=1)) + '</tbody>'
+        table_html += '</table>'
+
+        return render_template('upload_csv.html', table_html=table_html)
 
 @app.route('/predict', methods=['POST'])
 def predict():

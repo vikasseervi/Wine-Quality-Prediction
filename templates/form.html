@@ -16,7 +16,10 @@
             background-color: #f0f0f0;
         }
         .container {
+            display: flex;
+            flex-direction: column;
             background-color: #fff;
+            margin: auto;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
@@ -53,7 +56,7 @@
 </head>
 <body>
 <div class="container">
-    <h2>Wine Quality Prediction</h2>
+    <h2>Enter the details here</h2>
     <form action="/predict" method="post">
         <input type="text" name="fixed_acidity" placeholder="Fixed Acidity" required>
         <input type="text" name="volatile_acidity" placeholder="Volatile Acidity" required>
