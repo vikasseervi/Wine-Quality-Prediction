@@ -5,10 +5,8 @@ import joblib
 
 app = Flask(__name__)
 
-# Load the model
 model = joblib.load('model.pkl')
 
-# Define routes
 @app.route('/')
 def index():
     return render_template('index.html')
@@ -76,7 +74,7 @@ def predict():
     input_data = np.array(features).reshape(1, -1)
     prediction = model.predict(input_data)
     output = 'Good Quality Wine' if prediction[0] == 1 else 'Bad Quality Wine'
-    return render_template('form.html', prediction_text=f'Wine Quality: {output}')
+    return render_template('form.html', prediction_text= output)
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -52,6 +52,14 @@
             margin-top: 20px;
             text-align: center;
         }
+        .good {
+            color: green;
+            font-weight: bold;
+        }
+        .bad {
+            color: red;
+            font-weight: bold;
+        }
     </style>
 </head>
 <body>
@@ -71,11 +79,13 @@
         <input type="text" name="alcohol" placeholder="Alcohol" required>
         <button type="submit">Predict Quality</button>
     </form>
+
     {% if prediction_text %}
     <div class="result">
-        <h3>{{ prediction_text }}</h3>
+        <h3>Wine Quality: <span class="{{ 'good' if 'Good' in prediction_text else 'bad' }}">{{ prediction_text }}</span></h3>
     </div>
     {% endif %}
+
 </div>
 </body>
 </html>

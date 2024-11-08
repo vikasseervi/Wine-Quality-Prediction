@@ -7,8 +7,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import accuracy_score
 import joblib
 
-
-
 class DataLoader:
     def __init__(self, file_path):
         self.file_path = file_path
