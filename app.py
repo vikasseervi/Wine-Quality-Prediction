@@ -10,7 +10,7 @@ import numpy as np
 
 app = Flask(__name__)
 
-model = joblib.load('model.pkl')
+model = joblib.load('wine_quality_model.pkl')
 
 @app.route('/')
 def index():
@@ -48,6 +48,7 @@ def predict_csv():
 
         data = data[required_features]  # Select only the required columns
 
+        # Make predictions
         predictions = []
         for index, row in data.iterrows():
             input_data = row.values.reshape(1, -1)
