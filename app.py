@@ -1,7 +1,12 @@
-from flask import Flask, render_template, request, redirect, url_for
-import numpy as np
-import pandas as pd
+from flask import Flask, render_template, request, redirect
 import joblib
+from data_loader import DataLoader
+from data_visualizer import DataVisualizer
+from data_preprocessor import DataPreprocessor
+from model_trainer import ModelTrainer
+from predictor import Predictor
+import pandas as pd
+import numpy as np
 
 app = Flask(__name__)
 
@@ -32,7 +37,6 @@ def predict_csv():
     if file:
         data = pd.read_csv(file)
 
-        # Ensure the data has the required columns
         required_features = [
             'fixed acidity', 'volatile acidity', 'citric acid', 'residual sugar',
             'chlorides', 'free sulfur dioxide', 'total sulfur dioxide', 'density',
@@ -44,7 +48,6 @@ def predict_csv():
 
         data = data[required_features]  # Select only the required columns
 
-        # Make predictions
         predictions = []
         for index, row in data.iterrows():
             input_data = row.values.reshape(1, -1)
@@ -55,7 +58,6 @@ def predict_csv():
         data.insert(0, 'Serial No.', range(1, len(data) + 1))
         data['Prediction'] = predictions
 
-        # Convert DataFrame to HTML with custom classes
         def add_classes(row):
             css_class = 'good-quality' if row['Prediction'] == 'Good Quality Wine' else 'bad-quality'
             row_html = ''.join([f'<td class="{css_class}">{val}</td>' for val in row])
